@@ -11,7 +11,7 @@ Check machine properties over ssh
 `check-machine` is a binary to install globally,
 it expects that a file `check-machine.js` exists on `cwd`,
 
-```js
+```bash
 check-machine 1.0.0
 
     Usage
