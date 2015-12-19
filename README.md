@@ -113,4 +113,7 @@ that.emit('message', {
 
 ## More
 
-Additional links and comments.
+- https://github.com/maboiteaspam/check-machine/blob/master/check-machine.js
+- https://github.com/maboiteaspam/check-machine/blob/master/php-module.js
+- https://github.com/maboiteaspam/check-machine/blob/master/php-version.js
+- https://github.com/maboiteaspam/ssh2-utils
