@@ -30,9 +30,10 @@
     "chalk": "^1.1.1",
     "debug": "^2.2.0",
     "minimist": "^1.2.0",
+    "set-verbosity": "maboiteaspam/set-verbosity",
+    "show-help": "maboiteaspam/show-help",
     "ssh2-utils": "^1.0.28",
     "symbolsjs": "^1.0.0"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
