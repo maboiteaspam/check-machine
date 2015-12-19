@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Check-machine by maboiteaspam</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Check-machine</h1>
+      <h2 class="project-tagline">Check machine properties over ssh</h2>
+      <a href="https://github.com/maboiteaspam/check-machine" class="btn">View on GitHub</a>
+      <a href="https://github.com/maboiteaspam/check-machine/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/maboiteaspam/check-machine/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="check-machine" class="anchor" href="#check-machine" aria-hidden="true"><span class="octicon octicon-link"></span></a>check-machine</h1>
+
+<p>Check machine properties over ssh</p>
+
+<h2>
+<a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install</h2>
+
+<pre><code>npm i check-machine -g
+</code></pre>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p><code>check-machine</code> is a binary to install globally,
+it expects that a file <code>check-machine.js</code> exists on <code>cwd</code>,</p>
+
+<div class="highlight highlight-source-shell"><pre>check-machine 1.0.0
+
+    Usage
+        check-machine [opts] -- [machine] [constraint1 constraint2 constraint3 ...]
+        check-machine [machine] [constraint1 constraint2 constraint3 ...]
+
+    Options
+        -v verbose
+        -h <span class="pl-c1">help</span>
+
+    Examples
+        check-machine lb1 lb
+        check-machine lb2 lb
+        check-machine web2 web db redis</pre></div>
+
+<p><strong>check-machine.js</strong></p>
+
+<p>Is a node module which exports a function. This handler receives <code>argv</code>,
+returns a configuration object of ssh <code>hosts</code> and <code>constraints</code>,</p>
+
+<div class="highlight highlight-source-js"><pre>    {
+    machines<span class="pl-k">:</span> {
+      <span class="pl-s"><span class="pl-pds">'</span>vagrant<span class="pl-pds">'</span></span><span class="pl-k">:</span> ssh host
+    },
+    constraints<span class="pl-k">:</span> {
+      <span class="pl-s"><span class="pl-pds">'</span><span class="pl-en">constraint 1</span><span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-k">function</span> (<span class="pl-smi">sshConn</span>, <span class="pl-smi">argv</span>){},
+      <span class="pl-s"><span class="pl-pds">'</span>constraint 2<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-c1">require</span>(...)(...),
+      <span class="pl-s"><span class="pl-pds">'</span>constraint 3<span class="pl-pds">'</span></span><span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>constraint 1<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>constraint 2<span class="pl-pds">'</span></span>]
+    }
+  }</pre></div>
+
+<h4>
+<a id="ssh-host" class="anchor" href="#ssh-host" aria-hidden="true"><span class="octicon octicon-link"></span></a>ssh host</h4>
+
+<p>SSH hosts are plain objects</p>
+
+<div class="highlight highlight-source-js"><pre>{ host<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>127.0.0.1<span class="pl-pds">'</span></span>,
+    port<span class="pl-k">:</span> <span class="pl-c1">2222</span>,
+    username<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>vagrant<span class="pl-pds">'</span></span>,
+    password<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>vagrant<span class="pl-pds">'</span></span> }</pre></div>
+
+<h4>
+<a id="constraint" class="anchor" href="#constraint" aria-hidden="true"><span class="octicon octicon-link"></span></a>constraint</h4>
+
+<p>Constraints are <code>function (sshConn, argv)</code> which returns <code>function (next)</code>.</p>
+
+<div class="highlight highlight-source-js"><pre>    <span class="pl-k">function</span> <span class="pl-en">notFound</span>(<span class="pl-smi">sshConn</span>, <span class="pl-smi">argv</span>) {
+        <span class="pl-k">return</span> <span class="pl-k">function</span> (<span class="pl-smi">next</span>) {
+            <span class="pl-smi">that</span>.<span class="pl-en">emit</span>(<span class="pl-s"><span class="pl-pds">'</span>message<span class="pl-pds">'</span></span>, {
+                message<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>assert<span class="pl-pds">'</span></span>,
+                ...
+            })
+            <span class="pl-en">next</span>(<span class="pl-s"><span class="pl-pds">'</span>not found<span class="pl-pds">'</span></span>)
+        };
+    }</pre></div>
+
+<p>When constraints are require-able, they are
+are <code>function (params...)</code>
+which returns <code>function (sshConn, argv)</code>
+which returns <code>function (next)</code>.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c1">module</span>.<span class="pl-en">exports</span> <span class="pl-k">=</span> <span class="pl-k">function</span> (<span class="pl-smi">param</span>) {
+  <span class="pl-k">return</span> <span class="pl-k">function</span> (<span class="pl-smi">sshConn</span>, <span class="pl-smi">argv</span>) {
+    param <span class="pl-k">=</span> <span class="pl-k">!</span>param <span class="pl-k">?</span> ... <span class="pl-k">:</span> ...;
+    <span class="pl-k">return</span> <span class="pl-k">function</span> (<span class="pl-smi">next</span>) {
+        <span class="pl-smi">that</span>.<span class="pl-en">emit</span>(<span class="pl-s"><span class="pl-pds">'</span>message<span class="pl-pds">'</span></span>, {
+            message<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>assert<span class="pl-pds">'</span></span>,
+            ...
+        })
+        <span class="pl-en">next</span>(err, sshConn)
+    };
+  }
+};
+</pre></div>
+
+<h4>
+<a id="rendering" class="anchor" href="#rendering" aria-hidden="true"><span class="octicon octicon-link"></span></a>rendering</h4>
+
+<p>To render the status of the test, the constraints are invoked into the context af an event emitter.</p>
+
+<p>Constraints are expected to <code>emit('message', {})</code> events, such</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-smi">that</span>.<span class="pl-en">emit</span>(<span class="pl-s"><span class="pl-pds">'</span>message<span class="pl-pds">'</span></span>, {
+    message<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>assert<span class="pl-pds">'</span></span>,                          <span class="pl-c">// message type</span>
+    error<span class="pl-k">:</span> err,                                 <span class="pl-c">// execution error</span>
+    full_subject<span class="pl-k">:</span> stdout,                       <span class="pl-c">// full content on which the tests is performed</span>
+    subject<span class="pl-k">:</span> <span class="pl-smi">subject</span>.<span class="pl-c1">replace</span>(<span class="pl-sr"><span class="pl-pds">/</span><span class="pl-cce">\n</span><span class="pl-pds">/</span>g</span>, <span class="pl-s"><span class="pl-pds">'</span> <span class="pl-pds">'</span></span>),       <span class="pl-c">// When possible, a reduced part of the content</span>
+    expected<span class="pl-k">:</span> m,                                <span class="pl-c">// the expectation</span>
+    description<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>check php module<span class="pl-pds">'</span></span>,            <span class="pl-c">// a descriptive text for humans</span>
+    result<span class="pl-k">:</span> <span class="pl-k">!!</span>subject <span class="pl-k">&amp;&amp;</span> <span class="pl-smi">subject</span>.<span class="pl-c1">match</span>(m)       <span class="pl-c">// a boolean indicating the result</span>
+})</pre></div>
+
+<h2>
+<a id="more" class="anchor" href="#more" aria-hidden="true"><span class="octicon octicon-link"></span></a>More</h2>
+
+<ul>
+<li><a href="https://github.com/maboiteaspam/check-machine/blob/master/check-machine.js">https://github.com/maboiteaspam/check-machine/blob/master/check-machine.js</a></li>
+<li><a href="https://github.com/maboiteaspam/check-machine/blob/master/php-module.js">https://github.com/maboiteaspam/check-machine/blob/master/php-module.js</a></li>
+<li><a href="https://github.com/maboiteaspam/check-machine/blob/master/php-version.js">https://github.com/maboiteaspam/check-machine/blob/master/php-version.js</a></li>
+<li><a href="https://github.com/maboiteaspam/ssh2-utils">https://github.com/maboiteaspam/ssh2-utils</a></li>
+</ul>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/maboiteaspam/check-machine">Check-machine</a> is maintained by <a href="https://github.com/maboiteaspam">maboiteaspam</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
