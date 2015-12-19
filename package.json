@@ -1,24 +1,38 @@
 {
-    "name": "check-machine",
-    "version": "1.0.0",
-    "description": "check machine properties",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "dcheck": "npm outdated --depth=0",
-        "patch": "npm version patch -m \"patch %s\"",
-        "minor": "npm version minor -m \"minor %s\"",
-        "major": "npm version major -m \"major %s\"",
-        "preversion": "echo \"npm test: not defined\" && npi --explicit",
-        "version": "echo \"npm run build: not defined\"",
-        "postversion": "git push && git push --tags"
-    },
-    "keywords": [
-        "check",
-        "configuration",
-        "ssh",
-        "unix"
-    ],
-    "author": "maboiteaspam",
-    "license": "WTF"
+  "name": "check-machine",
+  "version": "1.0.0",
+  "description": "Check machine properties over ssh",
+  "main": "index.js",
+  "bin": {
+    "check-machine": "./bin.js"
+  },
+  "scripts": {
+    "vagrant": "vagrant up --provider=virtualbox",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dcheck": "npm outdated --depth=0",
+    "patch": "npm version patch -m \"patch %s\"",
+    "minor": "npm version minor -m \"minor %s\"",
+    "major": "npm version major -m \"major %s\"",
+    "preversion": "echo \"npm test: not defined\" && npi --explicit",
+    "version": "echo \"npm run build: not defined\"",
+    "postversion": "git push && git push --tags"
+  },
+  "keywords": [
+    "check",
+    "configuration",
+    "ssh",
+    "unix"
+  ],
+  "author": "maboiteaspam",
+  "license": "WTF",
+  "dependencies": {
+    "async": "^1.5.0",
+    "chalk": "^1.1.1",
+    "debug": "^2.2.0",
+    "minimist": "^1.2.0",
+    "ssh2-utils": "^1.0.28",
+    "symbolsjs": "^1.0.0"
+  },
+  "devDependencies": {
+  }
 }
