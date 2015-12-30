@@ -15,9 +15,15 @@ function usage () {/*
         check-machine lb2 lb
         check-machine web2 web db redis
 */}
+
+
+
 var pkg     = require('./package.json')
-var argv    = require('minimist')(process.argv.slice(2));
-var debug   = require('set-verbosity')(pkg.name, argv.v || argv.verbose);
+var argv  = require('minimist')(process.argv.slice(2));
+var debug = require('@maboiteaspam/set-verbosity')(pkg.name, process.argv);
+var help  = require('@maboiteaspam/show-help')(usage, process.argv, pkg);
+
+
 var fs      = require('fs')
 var async   = require('async');
 var chalk   = require('chalk');
@@ -26,14 +32,12 @@ var EventEmitter = require('events');
 
 require('show-help')(usage, process.argv, pkg)
 
-var rawArgs = argv['_']
-if ((!rawArgs || rawArgs.length<2)) {
-    return require('show-help').print(usage, pkg) && process.exit(0)
-}
+var rawArgs = argv['_'];
+debug('rawArgs %j', rawArgs);
+(!rawArgs || rawArgs.length<2) && help.print(usage, pkg) && help.die("Missing hosts");
 
 var machine = rawArgs.shift()
 var constraints = [].concat(rawArgs)
-var todo = []
 
 var localConfig = {
     machines: {},
@@ -55,7 +59,7 @@ var resolveStr = function (str){
         }
     }
     return function (next) {
-        debug('%j', str)
+        debug('undefined constraint %j', str)
         next('undefined constraint '+ str)
     }
 }
@@ -63,7 +67,11 @@ var resolveStr = function (str){
 var SSH2    = require('ssh2-utils')
 var ssh     = new SSH2();
 
-machine = machine.indexOf ? machine : [machine];
+machine = machine.indexOf ? machine.map(function (m) {
+  return localConfig.machines[m];
+}) : [machine];
+
+debug('machine %j', machine);
 
 machine.forEach(function (m) {
 
@@ -97,7 +105,7 @@ machine.forEach(function (m) {
     })
 })
 
-
+// a simplistic output handler
 function showAssert(machine){
     return function (data){
         if (data.result) {

@@ -26,12 +26,12 @@
   "author": "maboiteaspam",
   "license": "WTF",
   "dependencies": {
+    "@maboiteaspam/set-verbosity": "^2.0.3",
+    "@maboiteaspam/show-help": "^3.0.0",
     "async": "^1.5.0",
     "chalk": "^1.1.1",
     "debug": "^2.2.0",
     "minimist": "^1.2.0",
-    "set-verbosity": "maboiteaspam/set-verbosity",
-    "show-help": "maboiteaspam/show-help",
     "ssh2-utils": "^1.0.28",
     "symbolsjs": "^1.0.0"
   },
