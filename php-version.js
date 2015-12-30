@@ -9,9 +9,9 @@ module.exports = function (version) {
     return function (next) {
       var that = this
       ssh.exec(sshConn, 'php -v', function (err, stdout, stderr) {
-        debug('%j', err)
-        debug('%j', stdout)
-        debug('%j', stderr)
+        debug('err: %j', err)
+        debug('stdout: %j', stdout)
+        debug('stderr: %j', stderr)
         var subject = stdout.match(/\s([0-9]+[.][0-9]+[.][0-9]+)\s/)
         if (subject) subject = subject[1]
         that.emit('message', {

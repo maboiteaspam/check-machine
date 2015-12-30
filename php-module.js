@@ -9,9 +9,9 @@ module.exports = function (module) {
     return function (next) {
       var that = this
       ssh.exec(sshConn, 'php -m', function (err, stdout, stderr) {
-        debug('%j', err)
-        debug('%j', stdout)
-        debug('%j', stderr)
+        debug('err: %j', err)
+        debug('stdout: %j', stdout)
+        debug('stderr: %j', stderr)
         module.forEach(function (m){
           var subject = stdout
           that.emit('message', {
