@@ -1,9 +1,6 @@
 
-var debug   = require('debug')('check-machine')
-var SSH2    = require('ssh2-utils')
-var ssh     = new SSH2();
 
-module.exports = function (argv) {
+module.exports = function () {
   return {
     machines: {
       'vagrant': {
@@ -11,7 +8,8 @@ module.exports = function (argv) {
         port: 2222,
         username: 'vagrant',
         password: 'vagrant'
-      }
+      },
+      'realm_of_vagrant': ['vagrant']
     },
     constraints: {
       'php_version': require('./php-version')(/^5[.]4/),
