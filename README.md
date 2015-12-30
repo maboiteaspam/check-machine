@@ -111,6 +111,17 @@ that.emit('message', {
 })
 ```
 
+## Dev
+
+Kick-start your hacks like this,
+
+```
+git clone..
+vagrant up
+node bin.js vagrant php
+node bin.js vagrant php_version
+```
+
 ## More
 
 - https://github.com/maboiteaspam/check-machine/blob/master/check-machine.js
