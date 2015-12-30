@@ -1,6 +1,6 @@
 {
   "name": "check-machine",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Check machine properties over ssh",
   "main": "index.js",
   "bin": {
@@ -26,14 +26,14 @@
   "author": "maboiteaspam",
   "license": "WTF",
   "dependencies": {
-    "@maboiteaspam/set-verbosity": "^2.0.3",
-    "@maboiteaspam/show-help": "^3.0.0",
-    "async": "^1.5.0",
-    "chalk": "^1.1.1",
-    "debug": "^2.2.0",
-    "minimist": "^1.2.0",
-    "ssh2-utils": "^1.0.28",
-    "symbolsjs": "^1.0.0"
+    "@maboiteaspam/set-verbosity": ">=2.0.3 <3.0.0-0",
+    "@maboiteaspam/show-help": ">=3.0.0 <4.0.0-0",
+    "async": ">=1.5.0 <2.0.0-0",
+    "chalk": ">=1.1.1 <2.0.0-0",
+    "debug": ">=2.2.0 <3.0.0-0",
+    "minimist": ">=1.2.0 <2.0.0-0",
+    "ssh2-utils": ">=1.0.28 <2.0.0-0",
+    "symbolsjs": ">=1.0.0 <2.0.0-0"
   },
   "devDependencies": {}
 }
